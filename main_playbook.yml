@@ -1,0 +1,14 @@
+---
+- name: Create ACI snapshot
+  hosts: apic
+  gather_facts: false
+
+  tasks:
+    - name: Query snapshot
+      cisco.aci.aci_config_snapshot:
+        host: apic
+        username: "{{ vault_ansible_user }}"
+        password: "{{ vault_ansible_password }}"
+        state: query
+      delegate_to: localhost
+      register: query_result
