@@ -4,11 +4,27 @@
   gather_facts: false
 
   tasks:
+    - name: Create a snapshot
+      cisco.aci.aci_config_snapshot:
+        host: apic
+        username: "{{ vault_ansible_user }}"
+        password: "{{ vault_ansible_password }}"
+        state: present
+        export_policy: config_backup
+        description: Daily bacup
+        validate_certs: false
+      delegate_to: localhost
+
     - name: Query snapshot
       cisco.aci.aci_config_snapshot:
         host: apic
         username: "{{ vault_ansible_user }}"
         password: "{{ vault_ansible_password }}"
         state: query
+        validate_certs: false
       delegate_to: localhost
       register: query_result
+
+    - name: Show snapshot
+      debug:
+        var: query_result
